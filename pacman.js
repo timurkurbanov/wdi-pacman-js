@@ -1,6 +1,7 @@
 // Setup initial game stats
 let score = 0;
 let lives = 2;
+let powerPellets = 4;
 
 
 // Define your ghosts here
@@ -35,9 +36,8 @@ const clyde = {
   edible: false
 };
 
-
 // replace this comment with your four ghosts setup as objects
-
+const ghosts = ['inky', 'blinky', 'pinky', 'clyde'];
 
 // Draw the screen functionality
 function drawScreen() {
@@ -54,13 +54,19 @@ function clearScreen() {
 }
 
 function displayStats() {
-  console.log(`Score: ${score}     Lives: ${lives}`);
+  console.log(`Score: ${score}     Lives: ${lives}       powerPellets: ${powerPellets}`);
 }
+
 
 function displayMenu() {
   console.log('\n\nSelect Option:\n');  // each \n creates a new line
   console.log('(d) Eat Dot');
-  console.log('(q) Quit');
+  console.log('(p) Eat Power-Pettets');
+  console.log(`(1) Eat Inky (${inky.edible ? "edible" : "inedible"})`);
+  console.log(`(2) Eat Blinky (${blinky.edible ? "edible" : "inedible"})`);
+  console.log(`(3) Eat Pinky (${pinky.edible ? "edible" : "inedible"})`);
+  console.log(`(4) Eat Clyde (${clyde.edible ? "edible" : "inedible"})`);
+  console.log(`(q) Quit`);
 }
 
 function displayPrompt() {
@@ -75,6 +81,52 @@ function eatDot() {
   score += 10;
 }
 
+// function eatGhost(ghost) {
+//   if (ghost['edible']) {
+//     if (ghostsEaten < 4) {
+//       ghostsEaten +=1;
+//     }
+//   }
+// }
+
+function eatGhost(ghost) {
+  if (!ghost.edible) {
+    lives--;
+    console.log(`Name of ghost: ${ghost.name}     Color of ghost: ${ghost.colour}`);
+    gameOver();
+  }
+  else {
+    console.log(`${ghost.character}!`);
+    score += 200;
+    ghost.edible = false;
+  }
+}
+
+function isEdible(ghost) {
+  if (ghost.edible) {
+    
+  }
+}
+
+function gameOver() {
+  if (lives < 0) {
+    process.exit();
+  }
+}
+
+function eatPowerPellet() {
+  if (powerPellets > 0) {
+    score += 50;
+    for (i=0; i<4; i++) {
+      ghosts[i].edible = true;
+    }
+    powerPellets--;
+  }
+  else {
+    console.log('No Power-Pallets left!')
+  }
+}
+
 
 // Process Player's Input
 function processInput(key) {
@@ -86,6 +138,18 @@ function processInput(key) {
     case 'd':
       eatDot();
       break;
+    case 'p':
+      eatPowerPellet();
+      break;
+    // case '2':
+    //   eatDot();
+    //   break;
+    // case '3':
+    //   eatDot();
+    //   break;
+    // case '4':
+    //   eatDot();
+    //   break;
     default:
       console.log('\nInvalid Command!');
   }
